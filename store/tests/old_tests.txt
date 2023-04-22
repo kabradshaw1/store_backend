@@ -1,0 +1,207 @@
+from django.urls import reverse
+from django.test import TestCase
+from ..models import Item, Category, Order, OrderedItem
+from user.models import User
+from rest_framework.test import APITestCase, APIClient
+from rest_framework import status
+
+class Test_Create_Item(TestCase):
+
+  @classmethod
+  def setUpTestData(cls):
+    test_category = Category.objects.create(name='Food')
+    test_user = User.objects.create_user(username='test_user1', password='12345678')
+    # in the Very Academy tutorial, he used the category_id.  I'm not currently
+    # sure where he got that.
+    test_item = Item.objects.create(category_id=1, name='stuff', price=2.00, image='test.jpg', description='test test test', quantity=200)
+    test_order = Order.objects.create(item_id=1, username='test_user1')
+    test_odrdered_items = OrderedItem.objects.create(item_id=1, order_id=1, quantity=1)
+  
+  def test_store_content(self):
+    item = Item.objects.get(id=1) 
+    order = Order.objects.get(id=1)
+    category = Category.objects.get(id=1)
+    item_name = f'{item.name}'
+    item_price = f'{item.price}'
+    item_image = f'{item.image}'
+    item_description = f'{item.description}'
+    item_quantity = f'{item.quantity}'
+    order_username = f'{order.username}'
+    self.assertEqual(item_name, 'stuff')
+    self.assertEqual(item_price, 2.00)
+    self.assertEqual(item_image, 'test.jpg')
+    self.assertEqual(item_description, 'test test test')
+    self.assertEqual(item_quantity, 200)
+    self.assertEqual(order_username, 'test_user1')
+    self.assertEqual(str(item), "stuff")
+    self.assertEqual(str(order), 1)
+    self.assertEqual(str(category), 'Food')
+    
+class APITests(APITestCase):
+  # this tests put requests
+  def test_order_update(self):
+    client = APIClient()
+
+    self.test_category = Category.objects.create(name='django')
+    self.testuser1 = User.objects.create_user(username='test_user1', password='123456789')
+    self.testuser2 = User.objects.create_user(username='test_user2', password='123456789')
+
+    client.login(username=self.testuser2.username, password='123456789')
+    # url = reverse(('store:detailcreate', kwargs={'pk': 1}))
+
+    # response = client.put(
+    #   url, {
+    #     "id", 1,
+    #     "ordered_items",
+    #     'user',
+    #   }, format='json'
+    # )
+    # This print is to give me a better idea of what kind of error I have
+    # print(response.data)
+  # I need to build another test that confirms that I return a 403 when the wrong user attempts to update
+  def test_view_items(self):
+    url = reverse('store:listcreate')
+    response = self.client.get(url, format='json')
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+  def test_create_post(self):
+
+    self.test_category = Category.objects.create(name='django')
+
+    self.test_user1 = User.objects.create_user(username='test_user1', password='12345678')
+
+    # data = ["name": "new", "price": 1, "image": "text.jpg", "description": "test test test", "quantity": 1]
+    url = reverse('store: listcreate')
+    # response = self.client.post(url, data, format='json')
+    # self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+
+
+
+    import pytest
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework.test import APIClient, APITestCase
+from rest_framework import status
+
+from ..serializers import OrderSerializer
+from ..models import Order, OrderedItem, Item, Category
+from user.models import User
+
+class CheckoutTests(TestCase):
+
+	def setUp(self):
+		self.test_user1 = User.objects.create(username='test_user', email='test@gmail.com', is_active=True, is_staff=True, is_superuser=True, password='test')
+		# self.test_category = Category.objects.create(name='test')
+		self.test_item = Item.objects.create(category='Food', name='test_item', price=1.00, image='test.jpg', slug='test_slug', description='test_description', quantity=100)
+		self.test_item2 = Item.objects.create(category='Food', name='test_item2', price=2.00, image='test2.jpg', slug='test_slug2', description='test_description2', quantity=100)
+		self.client = APIClient()
+		self.client.force_authenticate(user=self.test_user1)
+
+	def test_checkout_with_valid_data(self):
+		
+		data = {
+			"price": "3.00",
+			"ordered_items": [
+				{
+					"item": 1,
+					"cartQty": 1,
+					"price": "1.00"
+				},
+				{
+				"item": 2,
+				"cartQty": 1,
+				"price": "2.00"
+				}
+			]
+		}
+
+		serializer = OrderSerializer(data=data)
+
+		self.assertTrue(serializer.is_valid())
+
+		response = self.client.post('/checkout/', data)
+
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		self.assertEqual(response.data, serializer.data)
+
+		order = Order.objects.get(id=response.data['id'])
+		self.assertEqual(order.user, self.user)
+		self.assertEqual(order.total, 200)
+
+		order_item = OrderedItem.objects.get(order=order)
+		self.assertEqual(order_item.product.id, order_item_data['product'])
+		self.assertEqual(order_item.quantity, order_item_data['cartQty'])
+		# url = reverse('order')
+		# response = self.client.post(url, data, format='json')
+		# self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		# self.assertEqual(len(response.data), 5)
+		# root = reverse()
+
+
+
+
+from django.test import TestCase
+from ..models import Item, Order, OrderedItem, Category
+from user.models import User
+
+class Model_Tests(TestCase):
+  @classmethod
+  def setUpTestData(cls):
+    Category.objects.create(name='Test')
+    Item.objects.create(name='test_item', price='1.00', category=1, slug='test_slug', image='test.jpg', description='test description', quantity=1)
+    Order.objects.create(user=1, price='1.00', created='4/9/23')
+    OrderedItem.objects.create(item=1, order=1, cartQty=1, price=1.00)
+    User.objects.create(username='test_user1', password='password', email='test@email.com')
+
+  def test_store_content(self):
+    category = Category.objects.get(id=1)
+    item = Item.objects.get(id=1) 
+    order = Order.objects.get(id=1)
+    ordered_item = OrderedItem.objects.get(id=1)
+    
+    category_name = f'{category.name}'
+
+    item_name = f'{item.name}'
+    item_price = f'{item.price}'
+    item_category = f'{item.category}'
+    item_slug = f'{item.slug}'
+    item_image = f'{item.image}'
+    item_description = f'{item.description}'
+    item_quantity = f'{item.quantity}'
+
+    order_user = f'{order.user}'
+    order_price = f'{order.price}'
+    
+    ordered_item_item = f'{ordered_item.item}'
+    ordered_item_order = f'{ordered_item.order}'
+    ordered_item_cartQrt = f'{ordered_item.cartQty}'
+    ordered_item_price = f'{ordered_item.price}'
+
+    self.assertEqual(category_name, 'Test')
+    self.assertEqual(str(category), 'Test')
+
+    self.assertEqual(ordered_item_price, 1)
+    self.assertEqual(ordered_item_cartQrt, 1)
+    self.assertEqual(ordered_item_item, 1)
+    self.assertEqual(ordered_item_order, 1)
+    self.assertEqual(str(ordered_item), 'cartQty: 1, item_id: 1')
+
+    self.assertEqual(order_user, 1)
+    self.assertEqual(order_price, 1)
+    self.assertEqual(str(order), 'user_id: 1, create: 4/9/23, price: 1')
+
+    self.assertEqual(item_name, 'test_item')
+    self.assertEqual(item_price, '1.00')
+    self.assertEqual(item_category, 1)
+    self.assertEqual(item_slug, 'test_slug')
+    self.assertEqual(item_image, 'test.jpg')
+    self.assertEqual(item_description, 'test description')
+    self.assertEqual(item_quantity, 1)
+    self.assertEqual(str(item), 'id: 1, item: test_tiem')
+
+
+
+
+    
