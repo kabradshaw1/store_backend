@@ -13,12 +13,12 @@ REAL_BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
 
-STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+# STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG')
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS").split(" ")
 
 AUTH_USER_MODEL = 'user.User'
 
@@ -92,10 +92,10 @@ DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE'),
         'NAME': config('DB_NAME'),
-        'USER': config('USER_NAME'),
-        'PASSWORD': config('DB_PW'),
-        'HOST': config('HOST'),
-        'PORT': config('PORT')
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT')
     }
 }
 
