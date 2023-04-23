@@ -1,3 +1,5 @@
+Dockerfile
+.dockerignore
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -109,8 +111,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-Dockerfile
-.dockerignore
+
 
 # Spyder project settings
 .spyderproject
