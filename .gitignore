@@ -109,6 +109,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+Dockerfile
+.dockerignore
 
 # Spyder project settings
 .spyderproject
