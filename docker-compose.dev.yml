@@ -31,9 +31,13 @@ services:
   db:
     container_name: core_db
     image: postgres:12.0-alpine
-    env_file: .env
+    environment:
+      - POSTGRES_DB=store
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=TDYoung17!
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+      - ./postgres-conf/postgresql.conf:/etc/postgresql/postgresql.conf
 
 volumes:
   static_volume:
