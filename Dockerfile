@@ -1,22 +1,39 @@
 FROM python:3.11-alpine3.17
 LABEL maintainer="https://www.linkedin.com/in/kyle-bradshaw-15950988/"
 
-# set work directory
-WORKDIR /app
-
-# set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# install psycopg2 dependencies
-RUN apk update \
-    && apk add postgresql-dev gcc python3-dev musl-dev
+COPY ./requirements.txt /tmp/requirements.txt
+COPY ./requirements.dev.txt /tmp/requirements.dev.txt
+COPY ./scripts /scripts
+COPY ./app /app
+WORKDIR /app
+EXPOSE 8000
 
-# install python dependencies
-COPY requirements.txt /app/requirements.txt
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+ARG DEV=false
+RUN python -m venv /py && \
+    /py/bin/pip install --upgrade pip && \
+    apk add --update --no-cache postgresql-client jpeg-dev && \
+    apk add --update --no-cache --virtual .tmp-build-deps \
+        build-base postgresql-dev musl-dev zlib zlib-dev linux-headers && \
+    /py/bin/pip install -r /tmp/requirements.txt && \
+    if [ $DEV = "true" ]; \
+        then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
+    fi && \
+    rm -rf /tmp && \
+    apk del .tmp-build-deps && \
+    adduser \
+        --disabled-password \
+        --no-create-home \
+        django-user && \
+    mkdir -p /vol/static/media && \
+    mkdir -p /vol/web/static && \
+    chown -R django-user:django-user /vol/ && \
+    chmod -R 755 /vol/web && \
+    chmod -R +x /scripts
 
+ENV PATH="/scripts:/py/bin:$PATH"
 
-# copy project
-COPY . .
+USER django-user
+
+CMD ["run.sh"]
