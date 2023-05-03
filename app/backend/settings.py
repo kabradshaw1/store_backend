@@ -168,4 +168,10 @@ SIMPLE_JWT = {
 }
 
 TESTING = False
+
 TEST_RUNNER = "backend.test_runner.BackendTestRunner"
+
+
+SPECTACULAR_SETTINGS = {
+    'COMPONENT_SPLIT_REQUEST': True,
+}
