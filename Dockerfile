@@ -1,5 +1,5 @@
-FROM python:3.11-alpine
-LABEL maintainer=""
+FROM python:3.11-alpine3.17
+LABEL maintainer="https://www.linkedin.com/in/kyle-bradshaw-15950988/"
 
 # set work directory
 WORKDIR /app
