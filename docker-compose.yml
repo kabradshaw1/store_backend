@@ -21,6 +21,7 @@ services:
       - DB_USER=devuser
       - DB_PASS=changeme
       - CORS_ALLOWED_ORIGIN=http://localhost:3000
+      - DEBUG=1
     depends_on:
       - db
 
