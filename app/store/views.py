@@ -9,6 +9,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status, permissions
 from rest_framework.request import Request
 
+# import stripe
+
 class CategoryViewSet(viewsets.ModelViewSet):
   http_method_names = ['get']
   serializer_class = CategorySerializer

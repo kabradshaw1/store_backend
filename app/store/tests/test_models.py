@@ -1,9 +1,6 @@
 """
 Tests for models.
 """
-from unittest.mock import patch
-from decimal import Decimal
-
 from django.test import TestCase
 
 from user.models import User
@@ -33,11 +30,11 @@ class ModelTests(TestCase):
       price='5.00'
     )
 
-    self.assertEqual(str(order), order.id)
+    self.assertEqual(int(order), order.id)
 
   def test_create_item(self):
     """Test creating an item is successful"""
-
+    models.Category.objects.create(name='test')
     item = models.Item.objects.create(
       name='test',
       price='1.00',
@@ -52,11 +49,27 @@ class ModelTests(TestCase):
 
   def test_create_ordered_item(self):
     """Test creating an ordered item is successful."""
-
+    user = User.objects.create_user(
+      'test@example.com',
+      'testpass123',
+    )
+    models.Item.objects.create(
+      name='test',
+      price='1.00',
+      category=1,
+      image='test.jpg',
+      slug='test',
+      description='test',
+      quanitity=1,
+    )
+    models.Order.objects.create(
+      user=user,
+      price='5.00'
+    )
     ordered_item = models.OrderedItem.objects.create(
       order=1,
       item=1,
       cartQty=1,
       price='1.00'
     )
-    self.assertEqual(str(ordered_item), ordered_item.id)
+    self.assertEqual(str(int(ordered_item)), ordered_item.id)
