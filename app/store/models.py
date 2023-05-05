@@ -32,7 +32,6 @@ class Item(models.Model):
 
 class Order(models.Model):
   id: int
-  # items: models.ManyToManyField[Item, 'OrderedItem']
   ordered_items: Manager['OrderedItem']
   user_id: int
 
@@ -44,7 +43,7 @@ class Order(models.Model):
   # stripe_token = models.CharField(max_length=100)
 
   def __str__(self):
-    return f'user_id: {self.user}, created: {self.created}, price: {self.price}'
+    return f'{self.id}'
 
 class OrderedItem(models.Model):
   id: int
@@ -57,7 +56,7 @@ class OrderedItem(models.Model):
   price = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0.01)])
 
   def __str__(self):
-    return f'{self.name}'
+    return f'{self.id}'
 
 
 

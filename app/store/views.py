@@ -47,9 +47,16 @@ def checkout(request):
   serializer = CheckoutSerializer(data=request.data)
 
   if serializer.is_valid():
+     # stripe.api_key = config('STRIPE_SECRET_KEY')
+    # paid_amount = sum(item.get('cartQty') * item.get('product').price for item in serializer.validated_data['items'])
 
     try:
-
+      # charge = stripe.Charge.create(
+      #     amount=int(paid_amount * 100),
+      #     currency='USD',
+      #     description='Charge from Djackets',
+      #     source=serializer.validated_data['stripe_token']
+      # ), paid_amount=paid_amount
 
       serializer.save(user=request.user)
 
@@ -58,15 +65,7 @@ def checkout(request):
       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
   return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-     # stripe.api_key = config('STRIPE_SECRET_KEY')
-      # paid_amount = sum(item.get('cartQty') * item.get('product').price for item in serializer.validated_data['items'])
 
-      # charge = stripe.Charge.create(
-      #     amount=int(paid_amount * 100),
-      #     currency='USD',
-      #     description='Charge from Djackets',
-      #     source=serializer.validated_data['stripe_token']
-      # ), paid_amount=paid_amount
 
 @api_view(['GET'])
 def health_check(request):
