@@ -20,7 +20,7 @@ class StoreAPITests(APITestCase):
     }
   def test_checkout(self):
 
-    self.user = User.objects.create_user(username='testuser', email='testuser@test.com', password='testpass')
+    self.user = User.objects.create_user(username='testuser', email='testuser@example.com', password='testpass')
     self.client.force_authenticate(user=self.user)
     response = self.client.post(f"{self.base_url_checkout}", data=self.data_order, format='json')
     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
