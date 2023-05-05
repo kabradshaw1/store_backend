@@ -67,3 +67,8 @@ def checkout(request):
       #     description='Charge from Djackets',
       #     source=serializer.validated_data['stripe_token']
       # ), paid_amount=paid_amount
+
+@api_view(['GET'])
+def health_check(request):
+    """Returns successful response."""
+    return Response({'healthy': True})

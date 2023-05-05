@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework.routers import SimpleRouter
 from user.views import UserViewSet, LoginViewSet, RefreshViewSet, RegistrationViewSet
-from store.views import ItemViewSet, OrderViewSet, CategoryViewSet, checkout
+from store.views import ItemViewSet, OrderViewSet, CategoryViewSet, checkout, health_check
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView
@@ -29,6 +29,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(routes.urls)),
     path('api/checkout/', checkout, name='checkout'),
+    path('api/health-check/', health_check, name='health-check'),
     path('api/schema/', SpectacularAPIView.as_view(), name='api-schema'),
     path(
         'api/docs/',
