@@ -52,14 +52,14 @@ INSTALLED_APPS = [
     'user',
 
     'rest_framework',
-    # 'corsheaders',
+    'corsheaders',
     'drf_spectacular',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -155,7 +155,7 @@ STATIC_ROOT = '/vol/web/static'
 #         os.environ.get('CORS_ALLOWED_ORIGINS', '').split(','),
 #     )
 # )
-# CORS_ALLOW_ALL_ORIGINS: True
+CORS_ALLOW_ALL_ORIGINS: True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
