@@ -7,7 +7,7 @@ class AuthenticationTest(APITestCase):
   base_url_login = reverse("auth-login-list")
   base_url_refresh = reverse("auth-refresh-list")
 
-  data_register = {"username": "testuser@example.com", "password": "12345678", "email": "testuser@example.com"}
+  data_register = {"username": "testuser@example.com", "password": "12345678", "email": "testuser2@example.com"}
 
   data_login = {
     "email": "testuser@example.com",
