@@ -21,13 +21,13 @@ class ModelTests(TestCase):
 
   def test_create_order(self):
     """Test creating an order is successful."""
-    user = create_user
+    user = User.objects.create(username='testuser3', email='user@example.com', password='testpass123')
     order = models.Order.objects.create(
       user=user,
       price='5.00'
     )
 
-    self.assertEqual(str(order), order.id)
+    self.assertEqual(str(order), order.price)
 
   def test_create_item(self):
     """Test creating an item is successful"""
@@ -67,4 +67,4 @@ class ModelTests(TestCase):
       cartQty=1,
       price='1.00'
     )
-    self.assertEqual(str(ordered_item), ordered_item.id)
+    self.assertEqual(str(ordered_item), ordered_item.price)
