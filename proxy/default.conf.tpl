@@ -1,3 +1,7 @@
+upstream webapp {
+    server react_app:5000;
+}
+
 server {
     listen ${LISTEN_PORT};
 
